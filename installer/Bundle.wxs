@@ -1,0 +1,27 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+
+  <Bundle Name="SnipTone"
+          Manufacturer="SnipTone"
+          Version="$(var.AppVersion)"
+          UpgradeCode="F19A3C7E-2D85-4E42-9B61-7C3A8D5E1F90"
+          IconSourceFile="$(var.IconPath)"
+          DisableModify="yes">
+
+    <BootstrapperApplication>
+      <bal:WixStandardBootstrapperApplication Theme="hyperlinkLicense"
+                                              LicenseUrl=""
+                                              LogoFile="$(var.LogoPath)"
+                                              LaunchTarget="[LocalAppDataFolder]Programs\SnipTone\sniptone.exe"
+                                              ShowVersion="yes"
+                                              SuppressOptionsUI="yes" />
+    </BootstrapperApplication>
+
+    <Chain>
+      <MsiPackage Id="SnipToneMsi"
+                  SourceFile="$(var.MsiPath)"
+                  Compressed="yes"
+                  Vital="yes" />
+    </Chain>
+  </Bundle>
+</Wix>

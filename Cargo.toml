@@ -1,0 +1,61 @@
+[package]
+name = "sniptone"
+version = "0.1.0"
+edition = "2024"
+description = "Native Rust HDR screenshot & tonemapping Game Bar HUD for Windows powered by GPUI"
+
+[dependencies]
+gpui = "0.2.2"
+half = { version = "2.7.1", features = ["use-intrinsics"] }
+image = { version = "0.25.10", default-features = false, features = ["png", "exr", "rayon"] }
+rayon = "1.12.0"
+smallvec = "1.15"
+chrono = "0.4"
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+async-channel = "2.5"
+raw-window-handle = "0.6"
+
+[dependencies.windows]
+version = "0.62.2"
+features = [
+    "Foundation",
+    "Graphics_Capture",
+    "Graphics_DirectX",
+    "Graphics_DirectX_Direct3D11",
+    "Win32_Foundation",
+    "Win32_Graphics_Direct3D",
+    "Win32_Graphics_Direct3D11",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Dxgi",
+    "Win32_Graphics_Dxgi_Common",
+    "Win32_Graphics_Gdi",
+    "Win32_Devices_Display",
+    "Win32_System_DataExchange",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Memory",
+    "Win32_System_Ole",
+    "Win32_System_Registry",
+    "Win32_System_WinRT",
+    "Win32_System_WinRT_Direct3D11",
+    "Win32_System_WinRT_Graphics_Capture",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+]
+
+[build-dependencies]
+winresource = "0.1"
+
+[profile.dev]
+opt-level = 2
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+opt-level = 3

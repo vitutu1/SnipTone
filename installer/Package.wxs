@@ -1,0 +1,90 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="SnipTone"
+           Manufacturer="SnipTone"
+           Version="$(var.AppVersion)"
+           UpgradeCode="8E4C7A2F-4B91-4D63-9C1E-5A8D3F2B7E01"
+           Scope="perUser"
+           Compressed="yes"
+           InstallerVersion="500">
+
+    <SummaryInformation Description="SnipTone — Native HDR Screenshot &amp; Tonemapping HUD"
+                        Manufacturer="SnipTone" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."
+                  AllowSameVersionUpgrades="yes" />
+
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <!-- Application icon shown in Windows Installed Apps / Programs & Features -->
+    <Icon Id="SnipToneIcon.ico" SourceFile="$(var.IconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="SnipToneIcon.ico" />
+    <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.LicensePath)" />
+    <ui:WixUI Id="WixUI_Minimal" />
+
+    <!-- Installation Directory: %LOCALAPPDATA%\Programs\SnipTone -->
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="ProgramsDir" Name="Programs">
+        <Directory Id="INSTALLFOLDER" Name="SnipTone" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="SnipTone" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="MainExecutable" Guid="B71A9D3E-6F24-4A81-8E30-1C9F4B62D501">
+        <File Id="SnipToneExe"
+              Name="sniptone.exe"
+              Source="$(var.ExePath)"
+              KeyPath="yes" />
+
+        <!-- Cleanly remove optional "Start with Windows" entry on uninstall -->
+        <RemoveRegistryValue Root="HKCU"
+                             Key="Software\Microsoft\Windows\CurrentVersion\Run"
+                             Name="SnipTone" />
+      </Component>
+
+      <Component Id="StartMenuShortcut" Directory="ApplicationProgramsFolder" Guid="C42E8F1A-91D3-4B75-A264-8D51E3F9C602">
+        <Shortcut Id="StartMenuSnipTone"
+                  Name="SnipTone"
+                  Description="Native HDR Screenshot &amp; Tonemapping HUD"
+                  Target="[INSTALLFOLDER]sniptone.exe"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="SnipToneIcon.ico" />
+        <RemoveFolder Id="RemoveStartMenuFolder" On="uninstall" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\SnipTone"
+                       Name="StartMenuShortcut"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+
+      <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="D53F902B-A2E4-4C86-B375-9E62F4A0D703">
+        <Shortcut Id="DesktopSnipTone"
+                  Name="SnipTone"
+                  Description="Native HDR Screenshot &amp; Tonemapping HUD"
+                  Target="[INSTALLFOLDER]sniptone.exe"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="SnipToneIcon.ico" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\SnipTone"
+                       Name="DesktopShortcut"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <Feature Id="MainFeature" Title="SnipTone" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Package>
+</Wix>
